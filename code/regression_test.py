@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn import metrics
-import seaborn as sn
 import math
 
 def import_data(filename):
@@ -30,11 +29,8 @@ def import_data(filename):
         for line in infile:
             values = line.split('\t')
             conf = float(values[3])
-            if math.isinf(conf)
-            if math.isinf(conf) and values[0] == "0":
-                conf = 500.0
-            elif math.isinf(conf) and values[0] == "1":
-                conf = 0.0
+            if math.isinf(conf):
+                conf = 60.0
             grammaticality.append(int(values[0]))
             length.append(int(values[1]))
             parsed.append(int(values[2]))
@@ -58,13 +54,30 @@ def main():
     training = import_data('analysis/in_domain_scores.tsv')
     print("Done.")
 
+    #X_train = training[['confidence']]
     X_train = training[['length', 'parsed', 'confidence', 'retrain']]
     y_train = training['grammaticality']
+
+    x_plot = training['confidence']
+    y_plot = training['length']
+    color_plot = training['grammaticality']
+
+    def get_color(x):
+        if x == 1:
+            return 'blue'
+        else:
+            return 'green'
+
+    colors = [get_color(x) for x in training['grammaticality']]
+
+    plt.scatter(x_plot, y_plot, c=colors)
+    plt.show()
 
     print("Importing testing data...")
     testing = import_data('analysis/out_of_domain_scores.tsv')
     print("Done.")
 
+    #X_test = testing[['confidence']]
     X_test = testing[['length', 'parsed', 'confidence', 'retrain']]
     y_test = testing['grammaticality']
 

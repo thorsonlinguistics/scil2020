@@ -29,12 +29,9 @@ ccglink evaluate --corpus cola_public/tokenized/in_domain_train.tsv -s 50 \
   --format cola --lexicon lexica/in_domain_train.lex \
   > analysis/in_domain_scores.tsv
 
-# Train the regression
-python code/regression.py
-
 # Validate on CoLA.
 ccglink evaluate --corpus cola_public/tokenized/out_of_domain_dev.tsv -s 50 \
-  -f cola --lexicon lexica/bwb_small.lex > analysis/out_of_domain_scores.tsv
+  -f cola --lexicon lexica/in_domain_train.lex > analysis/out_of_domain_scores.tsv
 
 # Evaluate the regression
-python code/evaluate_regression.py
+python code/regression_test.py
